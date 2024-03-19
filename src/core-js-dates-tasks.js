@@ -9,7 +9,7 @@
 
 /**
  * By the passed date returns the number of seconds elapsed since 00:00 01.01.1970.
- *
+ * По заданной дате возвращает количество секунд, прошедших с 00:00 01.01.1970.
  * @param {string} date - date and time.
  * @return {number} milliseconds in timestamp.
  *
@@ -17,13 +17,15 @@
  * '01 Jan 1970 00:00:00 UTC' => 0
  * '04 Dec 1995 00:12:00 UTC' => 818035920000
  */
-function dateToTimestamp(/* date */) {
-  throw new Error('Not implemented');
+function dateToTimestamp(date) {
+  const dateObject = new Date(date);
+  const timesDate = dateObject.getTime();
+  return timesDate;
 }
 
 /**
  * Returns the time in hh:mm:ss format from the received date.
- *
+ * Возвращает время в формате hh:mm:ss от полученной даты.
  * @param {Date} date - date.
  * @return {string} time in hh:mm:ss format.
  *
@@ -31,12 +33,22 @@ function dateToTimestamp(/* date */) {
  * Date(2023, 5, 1, 8, 20, 55) => '08:20:55'
  * Date(2015, 10, 20, 23, 15, 1) => '23:15:01'
  */
-function getTime(/* date */) {
-  throw new Error('Not implemented');
+function getTime(date) {
+  const dateObject = new Date(date);
+  let hours = dateObject.getHours();
+  let minutes = dateObject.getMinutes();
+  let seconds = dateObject.getSeconds();
+
+  hours = hours < 10 ? `0${hours}` : hours;
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  seconds = seconds < 10 ? `0${seconds}` : seconds;
+
+  return `${hours}:${minutes}:${seconds}`;
 }
 
 /**
  * Returns the name of the day of the week for a given date string.
+ * Возвращает название дня недели для заданной строки даты.
  *
  * @param {string} date - date and time.
  * @return {string} the name of the day of the week
@@ -46,13 +58,14 @@ function getTime(/* date */) {
  * '03 Dec 1995 00:12:00 UTC' => 'Sunday'
  * '2024-01-30T00:00:00.000Z' => 'Tuesday'
  */
-function getDayName(/* date */) {
-  throw new Error('Not implemented');
+function getDayName(date) {
+  const dateObject = new Date(date);
+  return dateObject.toLocaleDateString('en-US', { weekday: 'long' });
 }
 
 /**
  * Returns the date of the next Friday from a given date.
- *
+ * Возвращает дату следующей пятницы от заданной даты.
  * @param {Date} date
  * @return {Date}
  *
@@ -61,13 +74,17 @@ function getDayName(/* date */) {
  * Date('2024-02-13T00:00:00Z') => Date('2024-02-16T00:00:00Z')
  * Date('2024-02-16T00:00:00Z') => Date('2024-02-23T00:00:00Z')
  */
-function getNextFriday(/* date */) {
-  throw new Error('Not implemented');
+function getNextFriday(date) {
+  const currentDate = new Date(date);
+  const currentDayWeek = currentDate.getDay();
+  const daysFriday = (5 - currentDayWeek + 7) % 7 || 7;
+  currentDate.setDate(currentDate.getDate() + daysFriday);
+  return currentDate;
 }
 
 /**
  * Returns the number of days in a specified month and year.
- *
+ * Возвращает количество дней в указанном месяце и году.
  * @param {number} month - The month as a number (1 for January, 2 for February, etc.).
  * @param {number} year - The year as a four-digit number.
  * @return {number}
@@ -82,7 +99,7 @@ function getCountDaysInMonth(/* month, year */) {
 
 /**
  * Returns the total number of days between two dates, including both the start and end dates.
- *
+ * Возвращает общее количество дней между двумя датами, включая начальную и конечную даты.
  * @param {string} dateStart - The start date of the period in ISO 8601 format.
  * @param {string} dateEnd - The end date of the period in ISO 8601 format.
  * @return {number} - The total count of days in the period.
@@ -97,7 +114,7 @@ function getCountDaysOnPeriod(/* dateStart, dateEnd */) {
 
 /**
  * Returns true if a given date is within a specified range, including both the start and end dates.
- *
+ * Возвращает true, если заданная дата находится в указанном диапазоне, включая как начальную, так и конечную даты.
  * @typedef {{
  * start: string, // The start date in ISO 8601 format (e.g., 'YYYY-MM-DD').
  * end: string    // The end date in ISO 8601 format.
@@ -118,7 +135,7 @@ function isDateInPeriod(/* date, period */) {
 
 /**
  * Returns the date formatted in 'M/D/YYYY, hh:mm:ss a'.
- *
+ * Возвращает дату, отформатированную в 'M/D/YYYY, hh:mm:ss a'.
  * @param {string} date - The date to be formatted, in ISO 8601 format (e.g., 'YYYY-MM-DDTHH:mm:ss.sssZ').
  * @return {string} - The date formatted in 'Month/Day/Year, Hour:Minute:Second AM/PM'.
  *
@@ -133,7 +150,7 @@ function formatDate(/* date */) {
 
 /**
  * Returns the total number of weekend days (Saturdays and Sundays) in a specified month and year.
- *
+ * Возвращает общее количество выходных дней (суббот и воскресений) в указанном месяце и году.
  * @param {number} month - The source month as a number (1 for January, 2 for February, etc.).
  * @param {number} year - The source year as a four-digit number.
  * @return {number} - The total count of weekend days in the month.
@@ -149,7 +166,7 @@ function getCountWeekendsInMonth(/* month, year */) {
 
 /**
  * Returns the week number of the year for a given date.
- *
+ * Возвращает номер недели года для заданной даты.
  * @param {Date} date - The date for which to find the week number.
  * @return {number} - The week number of the year.
  *
@@ -165,6 +182,7 @@ function getWeekNumberByDate(/* date */) {
 /**
  * Returns the date of the next Friday the 13th from a given date.
  * Friday the 13th is considered an unlucky day in some cultures.
+ * Возвращает дату следующей пятницы 13-го от заданной даты.
  *
  * @param {Date} date - The starting date to search from.
  * @return {Date} - The date of the next Friday the 13th.
@@ -179,7 +197,7 @@ function getNextFridayThe13th(/* date */) {
 
 /**
  * Returns the quarter of the year for a given date.
- *
+ * Возвращает квартал года для заданной даты.
  * @param {Date} date - The date for which to find the quarter.
  * @return {number} - The quarter of the year (1-4).
  *
